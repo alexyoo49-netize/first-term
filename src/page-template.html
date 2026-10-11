@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>첫 번째 임기 | 통일 대한민국</title>
 <meta name="description" content="통일 직후 대통령이 되어 8개 부처의 정책과 정치적 위기를 다루는 10턴 정치 시뮬레이션 게임.">
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0;overflow-anchor:none}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
 <iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="첫 임기: 통일 대한민국" data-srcdoc="&lt;!doctype html&gt;
@@ -1306,6 +1306,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
   /** @type {MessagePort | null} */
   let hostPort = null;
+  let pendingDialogTop = null;
   const postToHost = (type, payload) =&gt; {
     if (hostPort != null) {
       apply(postHostMessage, hostPort, [{ type, ...payload }]);
@@ -1491,6 +1492,10 @@ html&gt;body{padding:0}&lt;/style&gt;
         postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
       }
       sendHeight();
+      if (pendingDialogTop != null) {
+        postToHost(&quot;first-term-dialog-scroll&quot;, { top: pendingDialogTop });
+        pendingDialogTop = null;
+      }
     },
     { capture: true },
   );
@@ -1533,6 +1538,14 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
     event.preventDefault();
     openExternal({ href });
+  });
+  globalThis.addEventListener(&quot;first-term-dialog&quot;, (event) =&gt; {
+    const top = event.detail?.top;
+    if (typeof top === &quot;number&quot; &amp;&amp; Number.isFinite(top) &amp;&amp; top &gt;= 0 &amp;&amp; top &lt;= 10000) {
+      if (hostPort == null) { pendingDialogTop = top; return; }
+      sendHeight();
+      postToHost(&quot;first-term-dialog-scroll&quot;, { top });
+    }
   });
   new ResizeObserver(sendHeight).observe(document.body);
   syncTheme();
@@ -2234,6 +2247,15 @@ __FIRST_TERM_FRAGMENT__
         height <= 10_000
       ) {
         frame.style.height = Math.ceil(height) + "px";
+      }
+      return;
+    }
+    // Game reports can arrive after a turn or when a saved game opens.
+    // Keep their headings visible even when no pointer action is active.
+    if (data.type === "first-term-dialog-scroll") {
+      const top = data.top;
+      if (typeof top === "number" && Number.isFinite(top) && top >= 0 && top <= frame.offsetHeight) {
+        globalThis.scrollTo({ top: Math.ceil(globalThis.scrollY + frame.getBoundingClientRect().top + top), behavior: "instant" });
       }
       return;
     }

@@ -37,4 +37,28 @@
 #first-term-government .g-scenario-file p{line-height:1.7}
 #first-term-government .g-scenario-file .g-scenario-focus{margin-top:12px;color:var(--g-muted)}
 #first-term-government .g-council-message>span{line-height:1.6}
+#first-term-government .g-event-attention{font-size:13px;line-height:1.6;margin:8px 0 18px;color:var(--g-muted)}
+#first-term-government .g-event-terms{margin:0 0 20px;font-size:13px;line-height:1.65}
+#first-term-government .g-event-terms>div{display:grid;grid-template-columns:90px minmax(0,1fr);gap:12px;margin:7px 0}
+#first-term-government .g-event-terms dt{font-weight:600}
+#first-term-government .g-event-terms dd{margin:0;color:var(--g-muted)}
+#first-term-government .g-layer.g-incident-overlay{background:light-dark(#152230a6,#03080ed9)}
+#first-term-government .g-event-warning,#first-term-government .g-event-critical{--incident-red:light-dark(#b72c38,#ff8f98);--incident-soft:light-dark(#fff1f2,#382028);--incident-pulse:light-dark(#f9d8dd,#5c2935);border:2px solid var(--incident-red)}
+#first-term-government .g-event-critical .g-dialogtitle h2{color:var(--incident-red)}
+#first-term-government .g-event-warning .g-event-alert,#first-term-government .g-event-critical .g-event-alert{color:var(--incident-red);background:var(--incident-soft);font-weight:600;min-height:42px}
+#first-term-government .g-event-warning .g-dialogicon,#first-term-government .g-event-critical .g-dialogicon{color:var(--incident-red);background:var(--incident-soft)}
+#first-term-government .g-warning-beacon{display:inline-block;flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:1}
+#first-term-government :is(.g-event-warning,.g-event-critical) .g-event-alert .g-warning-beacon{color:var(--incident-red)}
+#first-term-government .g-event-notice .g-event-alert{background:var(--g-blue-soft);color:var(--g-accent)}
+#first-term-government .g-event-notice .g-warning-beacon{display:none}
+#first-term-government .g-alert-arrival{animation:g-incident-enter 180ms ease-out both}
+#first-term-government .g-alert-arrival:is(.g-event-warning,.g-event-critical) .g-event-alert{animation:g-incident-warning 920ms ease-in-out 3}
+#first-term-government .g-alert-arrival:is(.g-event-warning,.g-event-critical) .g-warning-beacon{animation:g-incident-beacon 920ms ease-in-out 3}
+@keyframes g-incident-enter{from{opacity:0;transform:translateY(-16px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes g-incident-warning{0%,100%{background:var(--incident-soft);box-shadow:0 0 0 0 transparent}45%{background:var(--incident-pulse);box-shadow:0 0 0 3px color-mix(in srgb,var(--incident-red) 18%,transparent)}}
+@keyframes g-incident-beacon{0%,100%{opacity:.35}45%{opacity:1;box-shadow:0 0 0 4px color-mix(in srgb,currentColor 14%,transparent)}}
+@media(prefers-reduced-motion:reduce){
+ #first-term-government .g-alert-arrival,#first-term-government .g-alert-arrival .g-event-alert,#first-term-government .g-alert-arrival .g-warning-beacon{animation:none}
+}
+@media(max-width:420px){#first-term-government .g-event-terms>div{grid-template-columns:minmax(0,1fr);gap:2px}}
 @media(max-width:640px){#first-term-government .g-guidance{align-items:stretch;flex-direction:column;gap:10px;padding:12px}#first-term-government .g-guidance button{align-self:flex-start}#first-term-government .g-dialogfoot:has(.g-tutorial-nav){gap:10px;align-items:stretch;flex-direction:column}#first-term-government .g-tutorial-nav{justify-content:flex-end}#first-term-government .g-tutorial-focus,#first-term-government .g-event-explanation{padding:12px}}
