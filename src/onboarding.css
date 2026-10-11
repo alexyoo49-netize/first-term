@@ -47,7 +47,7 @@
 #first-term-government .g-event-critical .g-dialogtitle h2{color:var(--incident-red)}
 #first-term-government .g-event-warning .g-event-alert,#first-term-government .g-event-critical .g-event-alert{color:var(--incident-red);background:var(--incident-soft);font-weight:600;min-height:42px}
 #first-term-government .g-event-warning .g-dialogicon,#first-term-government .g-event-critical .g-dialogicon{color:var(--incident-red);background:var(--incident-soft)}
-#first-term-government .g-warning-beacon{display:inline-block;flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:1}
+#first-term-government .g-event-alert>.g-warning-beacon{padding:0;display:inline-block;flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:1}
 #first-term-government :is(.g-event-warning,.g-event-critical) .g-event-alert .g-warning-beacon{color:var(--incident-red)}
 #first-term-government .g-event-notice .g-event-alert{background:var(--g-blue-soft);color:var(--g-accent)}
 #first-term-government .g-event-notice .g-warning-beacon{display:none}
