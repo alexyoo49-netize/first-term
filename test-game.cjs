@@ -1,6 +1,6 @@
 const assert=require('assert');
 let G=require('./src/unification-engine.js');
-for(const name of ['politics','presidency','regions','guidance','progress'])G=require('./src/unification-'+name+'.js')(G);
+for(const name of ['politics','presidency','regions','guidance','progress','handbook'])G=require('./src/unification-'+name+'.js')(G);
 const settle=s=>{let n=0;while(s.pending&&s.phase!=='ended'){assert(++n<12,'event chain loop');const o=G.events[s.pending.id].options.find(o=>!G.optionAllowed(s,o));assert(o,`No available choice ${s.pending.id}`);assert(G.resolve(s,o.id));}return n;};
 const start=(leader='johnson',scenario='gradual',seed=7)=>{const s=G.start(leader,scenario,seed);settle(s);return s;};
 let runs=0,maxBytes=0,scandals=0,removals=0,political=0;
@@ -111,4 +111,30 @@ const longGame=start();longGame.termLimit=20;
 while(longGame.phase!=='ended'){assert(G.advance(longGame));settle(longGame);assert(longGame.progress.rows.length<=21);}
 assert.equal(longGame.turn,20);assert.equal(longGame.progress.rows.length,21);
 const longBytes=Buffer.byteLength(JSON.stringify(G.snapshot(longGame)));assert(longBytes<16384,longBytes);
-console.log(JSON.stringify({passed:true,runs,maxBytes,longBytes,scandals,removals,politicalDecisions:political,adviceChecks,progressChecks:true}));
+// Handbook previews explain actual starts and policy costs without changing the save or RNG.
+for(const l of G.leaders)for(const c of G.scenarios){
+ const state=G.start(l.id,c.id,11),original=JSON.stringify(state);
+ const preview=G.scenarioData(l.id,c.id);
+ assert.deepEqual(preview.metrics,G.metrics(state));
+ assert.equal(preview.state.debt,state.debt);
+ for(const chapter of ['start','scenarios','policies','numbers']){
+  const html=G.handbookMarkup(state,chapter,c.id,'rebuild');
+  assert(html.length>500);assert(!html.includes('undefined'));assert(!html.includes('NaN'));
+ }
+ for(const p of G.policies){
+  const ex=G.policyExample(state,p.id),i=G.policies.indexOf(p);
+  assert.equal(ex.cost,G.policyCost(state,i,ex.target));
+  const settled=JSON.parse(original);settled.effective=[...settled.levels];
+  const before=G.metrics(settled);settled.levels[i]=ex.target;settled.effective[i]=ex.target;
+  const after=G.metrics(settled);
+  for(const e of ex.effects)assert(Math.abs(after[e.id]-before[e.id]-e.delta)<1e-9);
+ }
+ assert.equal(JSON.stringify(state),original,'Guide changed the live game');
+}
+const guideStart=G.initial(),guideState=JSON.stringify(guideStart);
+for(const chapter of ['start','scenarios','policies','numbers'])assert(!G.handbookMarkup(guideStart,chapter).includes('undefined'));
+assert.equal(JSON.stringify(guideStart),guideState);
+assert.equal(G.scenarioData('macron','gradual').metrics.capacity,69);
+const policyCap=start();policyCap.levels[4]=4;
+assert.equal(G.policyExample(policyCap,'health').target,3);
+console.log(JSON.stringify({passed:true,runs,maxBytes,longBytes,scandals,removals,politicalDecisions:political,adviceChecks,progressChecks:true,handbookChecks:true}));

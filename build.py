@@ -12,10 +12,11 @@ SCRIPTS = (
     'unification-guidance.js',
     'unification-progress.js',
     'unification-charts.js',
+    'unification-handbook.js',
     'unification-ui.js',
 )
 
-styles = (SOURCE / 'onboarding.css').read_text(encoding='utf-8')
+styles = '\n'.join((SOURCE / name).read_text(encoding='utf-8') for name in ('onboarding.css', 'handbook.css'))
 fragment = (SOURCE / 'layout.html').read_text(encoding='utf-8').replace('</style>', styles + '\n</style>') + '<script>\n'
 fragment += '\n'.join((SOURCE / name).read_text(encoding='utf-8') for name in SCRIPTS)
 fragment += '\n</script>\n'
