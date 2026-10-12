@@ -1,0 +1,79 @@
+#first-term-government .g-help-entry{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 0 22px;border-bottom:1px solid var(--g-line);margin-bottom:22px}
+#first-term-government .g-help-entry p{font-size:14px;margin:0;line-height:1.6}
+#first-term-government .g-help-entry b{display:block;font-size:16px}
+#first-term-government .g-help-entry button{flex:none;background:var(--g-accent);color:white;border:0;padding:12px 18px;border-radius:5px;font:inherit;font-size:13px;cursor:pointer}
+#first-term-government .g-scenario-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0 24px}
+#first-term-government .g-scenario-cards button{display:flex;flex-direction:column;text-align:left;gap:8px;padding:16px 14px;border:1px solid var(--g-line);border-radius:6px;background:var(--g-panel);color:var(--g-text);font:inherit;cursor:pointer}
+#first-term-government .g-scenario-cards button[aria-pressed=true]{border-color:var(--g-accent);box-shadow:0 0 0 1px var(--g-accent);background:var(--g-blue-soft)}
+#first-term-government .g-scenario-cards small{color:var(--g-accent);font-size:11px}
+#first-term-government .g-scenario-cards b{font-size:15px;line-height:1.4}
+#first-term-government .g-scenario-cards span{font-size:12px;line-height:1.5;color:var(--g-muted)}
+#first-term-government .g-scenario-brief{padding:0 0 25px}
+#first-term-government .g-scenario-brief header>small{font-size:12px;color:var(--g-muted)}
+#first-term-government .g-scenario-brief h3{font-size:23px;margin:7px 0 10px}
+#first-term-government .g-scenario-brief p{font-size:14px;line-height:1.75;margin:6px 0 12px}
+#first-term-government .g-scenario-facts{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:18px 0}
+#first-term-government .g-scenario-facts h4{font-size:13px;margin:0;color:var(--g-accent)}
+#first-term-government .g-scenario-first,#first-term-government .g-handbook-now{padding:16px 18px;background:var(--g-blue-soft);border-radius:6px;margin:20px 0}
+#first-term-government .g-scenario-first>b,#first-term-government .g-handbook-now>b{font-size:14px;color:var(--g-accent)}
+#first-term-government .g-scenario-first p:last-child,#first-term-government .g-handbook-now p:last-child{margin-bottom:0}
+#first-term-government .g-start-numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin:24px 0 10px}
+#first-term-government .g-start-numbers dt{font-size:12px;color:var(--g-muted)}
+#first-term-government .g-start-numbers dd{font-size:26px;font-weight:700;margin:7px 0;letter-spacing:-.03em}
+#first-term-government .g-start-numbers dd small{font-size:12px;font-weight:400;color:var(--g-muted);margin-left:4px}
+#first-term-government .g-start-numbers p{font-size:12px;color:var(--g-muted);line-height:1.5;margin:8px 0}
+#first-term-government .g-start-meter{display:block;height:4px;background:var(--g-line);border-radius:8px;overflow:hidden}
+#first-term-government .g-start-meter>span{display:block;height:100%;background:var(--g-accent)}
+#first-term-government .g-handbook{font-size:14px;line-height:1.75}
+#first-term-government .g-handbook h3{font-size:20px;line-height:1.45;margin:24px 0 10px}
+#first-term-government .g-handbook h4{font-size:15px;margin:22px 0 7px}
+#first-term-government .g-handbook p{margin:8px 0 16px}
+#first-term-government .g-handbook-tabs{display:flex;flex-wrap:wrap;gap:4px 18px;border-bottom:1px solid var(--g-line);margin-bottom:22px}
+#first-term-government .g-handbook-tabs button{padding:8px 0 12px;color:var(--g-muted);background:none;border:0;border-bottom:2px solid transparent;font:inherit;font-size:13px;cursor:pointer}
+#first-term-government .g-handbook-tabs button[aria-pressed=true]{color:var(--g-accent);border-bottom-color:var(--g-accent);font-weight:700}
+#first-term-government .g-handbook-content>h3:first-child{margin-top:0}
+#first-term-government .g-handbook-link{background:none;color:var(--g-accent);padding:8px 0;border:0;font:inherit;font-size:13px;text-align:left;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+#first-term-government .g-handbook-actions{display:flex;flex-wrap:wrap;gap:8px 22px}
+#first-term-government .g-handbook-picks{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 24px}
+#first-term-government .g-handbook-picks button{background:var(--g-panel);border:1px solid var(--g-line);color:var(--g-text);padding:7px 11px;border-radius:4px;font:inherit;font-size:12px;cursor:pointer}
+#first-term-government .g-handbook-picks button[aria-pressed=true]{border-color:var(--g-accent);color:var(--g-accent);background:var(--g-blue-soft)}
+#first-term-government .g-handbook-terms{margin:8px 0 24px}
+#first-term-government .g-handbook-terms>div{display:grid;grid-template-columns:125px minmax(0,1fr);gap:18px;border-bottom:1px solid var(--g-line);padding:12px 0}
+#first-term-government .g-handbook-terms dt{font-weight:600}
+#first-term-government .g-handbook-terms dd{margin:0}
+#first-term-government .g-play-order{padding-left:24px}
+#first-term-government .g-play-order li{padding:5px 0 10px 5px}
+#first-term-government .g-play-order p{margin:5px 0;color:var(--g-muted)}
+#first-term-government .g-handbook li{margin-bottom:9px}
+#first-term-government .g-policy-example{background:var(--g-bg);padding:1px 18px 6px;border-radius:6px;margin:18px 0}
+#first-term-government .g-policy-deltas{list-style:none;padding:0;margin:8px 0}
+#first-term-government .g-policy-deltas li{display:flex;justify-content:space-between;gap:18px;padding:8px 0;margin:0;border-bottom:1px solid var(--g-line)}
+#first-term-government .g-handbook-note{font-size:12px!important;line-height:1.65!important;color:var(--g-muted)}
+#first-term-government .g-handbook-kicker{color:var(--g-accent);font-size:12px}
+#first-term-government .g-handbook-kicker+h3{margin-top:3px}
+#first-term-government .g-handbook-details{border-top:1px solid var(--g-line);padding:12px 0;font-size:13px;line-height:1.7}
+#first-term-government .g-handbook-details summary{cursor:pointer;color:var(--g-accent);font-weight:600}
+#first-term-government .g-handbook-details summary b{float:right;color:var(--g-text);margin-left:12px}
+#first-term-government .g-handbook-details p{margin:12px 0}
+#first-term-government .g-event-explanation{margin-top:12px}
+@media(max-width:700px){
+ #first-term-government .g-scenario-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #first-term-government .g-start-numbers{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 20px}
+ #first-term-government .g-scenario-facts{gap:16px}
+}
+@media(max-width:440px){
+ #first-term-government .g-help-entry{display:block}
+ #first-term-government .g-help-entry button{margin-top:12px}
+ #first-term-government .g-scenario-cards{gap:8px}
+ #first-term-government .g-scenario-cards button{padding:12px 10px}
+ #first-term-government .g-scenario-cards b{font-size:14px}
+ #first-term-government .g-scenario-facts{grid-template-columns:1fr;gap:6px}
+ #first-term-government .g-scenario-brief h3{font-size:21px}
+ #first-term-government .g-handbook-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+ #first-term-government .g-handbook-tabs button{text-align:left;font-size:12px}
+ #first-term-government .g-handbook{font-size:13px}
+ #first-term-government .g-handbook h3{font-size:18px}
+ #first-term-government .g-handbook-terms>div{grid-template-columns:1fr;gap:3px}
+ #first-term-government .g-policy-example{padding-left:12px;padding-right:12px}
+ #first-term-government .g-scenario-first,#first-term-government .g-handbook-now{padding:12px}
+}
