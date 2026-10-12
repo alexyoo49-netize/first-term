@@ -1,6 +1,6 @@
 const assert=require('assert');
 let G=require('./src/unification-engine.js');
-for(const name of ['politics','presidency','regions','guidance'])G=require('./src/unification-'+name+'.js')(G);
+for(const name of ['politics','presidency','regions','guidance','progress'])G=require('./src/unification-'+name+'.js')(G);
 const settle=s=>{let n=0;while(s.pending&&s.phase!=='ended'){assert(++n<12,'event chain loop');const o=G.events[s.pending.id].options.find(o=>!G.optionAllowed(s,o));assert(o,`No available choice ${s.pending.id}`);assert(G.resolve(s,o.id));}return n;};
 const start=(leader='johnson',scenario='gradual',seed=7)=>{const s=G.start(leader,scenario,seed);settle(s);return s;};
 let runs=0,maxBytes=0,scandals=0,removals=0,political=0;
@@ -72,4 +72,43 @@ assert(G.advice(limited).find(a=>a.id==='nightingale').recommendation.includes('
 const lastMartial=start();lastMartial.turn=9;lastMartial.risk.unrest=90;G.declareMartial(lastMartial);
 G.advance(lastMartial);assert.equal(lastMartial.pending.id,'martial_review');G.resolve(lastMartial,'lift');settle(lastMartial);
 assert.equal(lastMartial.phase,'ended');assert.equal(lastMartial.turn,10);
-console.log(JSON.stringify({passed:true,runs,maxBytes,scandals,removals,politicalDecisions:political,adviceChecks}));
+// A baseline is captured before the first decision and never rewritten by it.
+const tracked=G.start('johnson','collapse',8),before=G.progressSeries(tracked,'capacity');
+const baseline=JSON.stringify(tracked.progress.initial);
+assert(G.resolve(tracked,'staff'));
+assert.equal(JSON.stringify(tracked.progress.initial),baseline);
+assert.equal(G.progressSeries(tracked,'capacity').delta,8);
+assert.equal(G.progressSeries(tracked,'capacity').status,'better');
+assert.equal(G.progressSeries(tracked,'capacity').lastDelta,null);
+assert.equal(tracked.progress.rows.length,1);
+// Refused actions and repeated reads do not create fake samples.
+const unchanged=JSON.stringify(tracked.progress);assert(!G.resolve(tracked,'staff'));
+G.progressSeries(tracked,'capacity');G.snapshot(tracked);assert.equal(JSON.stringify(tracked.progress),unchanged);
+// Freeze the previous turn only after all its decisions; record adviser results too.
+assert(G.dispatchAdviser(tracked,'nightingale','water'));
+const previousDisease=G.progressSeries(tracked,'disease').current;
+assert(G.advance(tracked));settle(tracked);
+const diseaseProgress=G.progressSeries(tracked,'disease');
+assert.equal(diseaseProgress.lastDelta,Math.round((diseaseProgress.current-previousDisease)*10)/10);
+assert.equal(diseaseProgress.current,Math.round(tracked.risk.disease*10)/10);
+assert.deepEqual(G.restore(G.snapshot(tracked)).progress,tracked.progress);
+// A lower unemployment rate is an improvement; extra spending is not scored as a failure.
+const jobsBefore=G.progressSeries(tracked,'jobs').initial;tracked.boost.jobs-=2;
+assert(G.progressSeries(tracked,'jobs').current<jobsBefore);
+assert.equal(G.progressSeries(tracked,'jobs').status,'better');
+assert.equal(G.progressSeries(tracked,'spending').definition.direction,0);
+// Old saves begin at their real current state instead of inventing earlier values.
+const previousSave=G.snapshot(tracked);delete previousSave.progress;previousSave.turn=7;
+const resumed=G.restore(previousSave),firstRecord=G.progressSeries(resumed,'infra');
+assert.equal(firstRecord.origin,'resumed');assert.equal(firstRecord.from,7);
+assert.equal(firstRecord.delta,0);assert.equal(firstRecord.lastDelta,null);assert.equal(firstRecord.points.length,1);
+assert.deepEqual(G.restore(G.snapshot(resumed)).progress,resumed.progress);
+// Invalid or incomplete chart data cannot break loading an otherwise valid game.
+const malformed=G.restore({...previousSave,progress:{v:1,from:0,origin:'new',initial:[null],rows:[[0]]}});
+assert.equal(G.progressSeries(malformed,'infra').from,7);
+// Complete a legacy twenty-turn game with all chart records within the save budget.
+const longGame=start();longGame.termLimit=20;
+while(longGame.phase!=='ended'){assert(G.advance(longGame));settle(longGame);assert(longGame.progress.rows.length<=21);}
+assert.equal(longGame.turn,20);assert.equal(longGame.progress.rows.length,21);
+const longBytes=Buffer.byteLength(JSON.stringify(G.snapshot(longGame)));assert(longBytes<16384,longBytes);
+console.log(JSON.stringify({passed:true,runs,maxBytes,longBytes,scandals,removals,politicalDecisions:political,adviceChecks,progressChecks:true}));

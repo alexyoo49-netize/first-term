@@ -10,6 +10,8 @@ SCRIPTS = (
     'unification-presidency.js',
     'unification-regions.js',
     'unification-guidance.js',
+    'unification-progress.js',
+    'unification-charts.js',
     'unification-ui.js',
 )
 
